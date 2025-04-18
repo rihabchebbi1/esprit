@@ -7,7 +7,7 @@ import tn.esprit.gaspillagezero.entites.Menu_Recipe_Management.Ingredient;
 import tn.esprit.gaspillagezero.services.Menu_Recipe_Management_Service.IIngredientService;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:4201") // Permet à Angular d'accéder
+@CrossOrigin(origins = "http://localhost:4200")// Permet à Angular d'accéder
 @RestController
 @RequestMapping("/Ingredients")
 public class IngredientController {

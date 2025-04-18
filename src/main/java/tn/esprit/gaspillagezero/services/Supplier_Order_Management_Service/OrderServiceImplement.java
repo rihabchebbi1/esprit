@@ -2,17 +2,61 @@ package tn.esprit.gaspillagezero.services.Supplier_Order_Management_Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.esprit.gaspillagezero.entites.Menu_Recipe_Management.Ingredient;
 import tn.esprit.gaspillagezero.entites.Supplier_Order_Management.*;
+import tn.esprit.gaspillagezero.repository.Menu_Recipe_Management_Repository.IngredientRepository;
+import tn.esprit.gaspillagezero.repository.Supplier_Order_Management_Repository.OrderItemRepository;
 import tn.esprit.gaspillagezero.repository.Supplier_Order_Management_Repository.OrderRepository;
-
+import tn.esprit.gaspillagezero.repository.Supplier_Order_Management_Repository.SupplierRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+
 
 @Service
 public class OrderServiceImplement implements OrderService{
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    IngredientRepository ingredientRepository;
+
+    @Autowired
+    SupplierRepository supplierRepository;
+
+    @Autowired
+    OrderItemRepository orderItemRepository;
+
+    @Override
+    public void createOrderFromIngredient(tn.esprit.gaspillagezero.dto.IngredientDTO ingredientDTO) {
+        Supplier supplier = supplierRepository.findById(ingredientDTO.getSupplierID())
+                .orElseThrow(() -> new RuntimeException("Fournisseur introuvable"));
+
+        Ingredient ingredient = ingredientRepository.findById(ingredientDTO.getIngredientID())
+                .orElseThrow(() -> new RuntimeException("Ingrédient introuvable"));
+
+        Order order = new Order();
+        order.setDeliveryDate(LocalDateTime.now().plusDays(3));
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setSupplier(supplier);
+        order.setIngredient(ingredient);
+        order.setQuantity(ingredientDTO.getQuantity());
+        orderRepository.save(order);
+
+    }
+
+    @Override
+    public List<Order> findBySuplier(Integer idSuplier) {
+        Supplier supplier= supplierRepository.findById(idSuplier).orElseThrow(
+                () -> new RuntimeException("Not Found")
+        );
+        return orderRepository.findAllBySupplier(supplier);
+    }
+
+    @Override
+    public List<Order> findByStatus(OrderStatus orderStatus) {
+        return orderRepository.findAllByOrderStatus(orderStatus);
+    }
+
     @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -25,6 +69,7 @@ public class OrderServiceImplement implements OrderService{
 
     @Override
     public Order createOrder(Order order) {
+        order.setOrderStatus(OrderStatus.PENDING);
         return orderRepository.save(order);
     }
 
@@ -35,24 +80,9 @@ public class OrderServiceImplement implements OrderService{
 
     @Override
     public void deleteOrder(Integer orderID) {
-    orderRepository.deleteById(orderID);
+        orderRepository.findById(orderID).orElseThrow(()->new RuntimeException("Not Found"));
+        orderRepository.deleteById(orderID);
     }
 
-    public void createOrderFromIngredient(IngredientDTO ingredient) {
-        Order order = new Order();
-        order.setProductType(ingredient.getPricePerUnit()); // ou selon ta logique
-        order.setDeliveryDate(LocalDateTime.now().plusDays(3));
-        order.setOrderStatus(OrderStatus.PENDING);
 
-        Supplier supplier = new Supplier();
-        supplier.setSupplierID(ingredient.getSupplierID());
-        order.setSupplier(supplier);
-
-        OrderItem item = new OrderItem();
-        item.setQuantity(100); // selon logique métier
-        item.setOrder(order);
-
-        order.setOrderItems(Set.of(item));
-        orderRepository.save(order);
-    }
 }

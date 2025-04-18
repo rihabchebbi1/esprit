@@ -20,34 +20,7 @@ public class OrderItem {
 
     private Integer quantity;
     @ManyToOne
-    @JoinColumn(name = "ingredient_id")
-    private Ingredient ingredient;
-    @ManyToOne
-    private Order order;
-    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    public Integer getOrderItemID() {
-        return orderItemID;
-    }
 
-    public void setOrderItemID(Integer orderItemID) {
-        this.orderItemID = orderItemID;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

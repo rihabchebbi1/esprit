@@ -28,8 +28,9 @@ public class Ingredient {
     Boolean required;
     float pricePerUnit;
     private int stock;
-    @OneToMany(mappedBy = "ingredient")
-    private List<OrderItem> orderItems;// Quantité en stock
+
+
+
     public Date getExpirationDate() {
         return expirationDate;
     }

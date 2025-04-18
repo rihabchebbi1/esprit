@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4201")  // Your Angular app's URL
+                .allowedOrigins("http://localhost:4200")  // Your Angular app's URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
@@ -29,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
         CorsConfiguration config = new CorsConfiguration();
 
         // Allow all origins, headers, and methods
-        config.addAllowedOrigin("http://localhost:4201");  // Angular app URL
+        config.addAllowedOrigin("http://localhost:4200");  // Angular app URL
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);
