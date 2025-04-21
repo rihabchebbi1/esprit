@@ -18,5 +18,7 @@ public interface OrderService {
     List<Order> findBySuplier(Integer idSuplier);
     List<Order> findByStatus(OrderStatus orderStatus);
 
+    Integer getCountOrders();
+
 
 }

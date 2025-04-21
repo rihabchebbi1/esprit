@@ -11,4 +11,5 @@ public interface SupplierService {
     Supplier addSupplier(Supplier supplier);
     Supplier updateSupplier(Integer supplierID, Supplier supplier);
     void deleteSupplier(Integer supplierID);
+    Integer getCountSuppliers();
 }

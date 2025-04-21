@@ -1,6 +1,5 @@
 package tn.esprit.gaspillagezero.controllers.Supplier_Order_Managementcontrollers;
 
-import org.apache.http.client.methods.HttpOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.gaspillagezero.dto.IngredientDTO;
 import tn.esprit.gaspillagezero.entites.Supplier_Order_Management.Order;
 import tn.esprit.gaspillagezero.entites.Supplier_Order_Management.OrderStatus;
-import tn.esprit.gaspillagezero.entites.Supplier_Order_Management.Supplier;
-import tn.esprit.gaspillagezero.services.Supplier_Order_Management_Service.IngredientStockChecker;
 import tn.esprit.gaspillagezero.services.Supplier_Order_Management_Service.OrderService;
 
 import java.util.List;
@@ -19,11 +16,15 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private IngredientStockChecker ingredientStockChecker;
+
     @GetMapping
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
+    }
+
+    @GetMapping("/count")
+    public Integer getCountOrders() {
+        return orderService.getCountOrders();
     }
 
     @PostMapping("/ingredient")
@@ -64,11 +65,7 @@ public class OrderController {
     public void deleteOrder(@PathVariable Integer orderID) {
         orderService.deleteOrder(orderID);
     }
-    @PostMapping("/check-stock/{ingId}")
-    public ResponseEntity<String> checkIngredientStock(@PathVariable Long ingId) {
-        ingredientStockChecker.checkAndCreateOrder(ingId);
-        return ResponseEntity.ok("Vérification du stock effectuée.");
-    }
+
 
 }
 

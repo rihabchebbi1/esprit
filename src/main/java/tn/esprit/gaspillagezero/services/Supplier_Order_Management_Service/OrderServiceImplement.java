@@ -36,7 +36,7 @@ public class OrderServiceImplement implements OrderService{
 
         Order order = new Order();
         order.setDeliveryDate(LocalDateTime.now().plusDays(3));
-        order.setOrderStatus(OrderStatus.PENDING);
+        order.setOrderStatus(OrderStatus.PENDING); // Default if no status is passe
         order.setSupplier(supplier);
         order.setIngredient(ingredient);
         order.setQuantity(ingredientDTO.getQuantity());
@@ -84,5 +84,8 @@ public class OrderServiceImplement implements OrderService{
         orderRepository.deleteById(orderID);
     }
 
+    public Integer getCountOrders(){
+        return Math.toIntExact(orderRepository.count());
+    }
 
 }

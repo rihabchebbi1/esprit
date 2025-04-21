@@ -30,7 +30,7 @@ public class Order {
     Integer quantity;
 
     @Enumerated(EnumType.STRING)
-    OrderStatus orderStatus= OrderStatus.PENDING;
+    OrderStatus orderStatus;
 
 
     @ManyToOne

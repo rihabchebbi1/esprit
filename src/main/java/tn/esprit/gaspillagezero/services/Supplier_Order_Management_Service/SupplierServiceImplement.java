@@ -2,7 +2,9 @@ package tn.esprit.gaspillagezero.services.Supplier_Order_Management_Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.esprit.gaspillagezero.entites.Supplier_Order_Management.Order;
 import tn.esprit.gaspillagezero.entites.Supplier_Order_Management.Supplier;
+import tn.esprit.gaspillagezero.repository.Supplier_Order_Management_Repository.OrderRepository;
 import tn.esprit.gaspillagezero.repository.Supplier_Order_Management_Repository.SupplierRepository;
 
 import java.util.List;
@@ -10,6 +12,9 @@ import java.util.List;
 public class SupplierServiceImplement implements SupplierService{
     @Autowired
     SupplierRepository supplierRepository;
+    @Autowired
+    OrderRepository orderRepository;
+
     @Override
     public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
@@ -32,6 +37,17 @@ public class SupplierServiceImplement implements SupplierService{
 
     @Override
     public void deleteSupplier(Integer supplierID) {
-    supplierRepository.deleteById(supplierID);
+        Supplier todeleteSupplier = this.getSupplierById(supplierID);
+        List<Order> orderList = orderRepository.findAllBySupplier(todeleteSupplier);
+        for (Order order : orderList) {
+            orderRepository.deleteById(order.getOrderID()); // Assuming getOrderID() returns the Integer ID
+        }
+        supplierRepository.deleteById(supplierID);
+    }
+
+    @Override
+    public Integer getCountSuppliers()
+    {
+        return Math.toIntExact(supplierRepository.count());
     }
 }

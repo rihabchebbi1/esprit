@@ -17,6 +17,10 @@ public class SupplierController {
             return supplierService.getAllSuppliers();
         }
 
+        @GetMapping("/count")
+    public Integer getCountSuppliers() {
+        return supplierService.getCountSuppliers();
+    }
         @GetMapping("/{supplierID}")
         public Supplier getSupplierById(@PathVariable Integer supplierID) {
             return supplierService.getSupplierById(supplierID);
