@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import okhttp3.*;
 import org.springframework.stereotype.Service;
 import tn.esprit.gaspillagezero.entites.Supplier_Order_Management.Chat;
+import tn.esprit.gaspillagezero.entites.Supplier_Order_Management.Order;
 import tn.esprit.gaspillagezero.repository.Supplier_Order_Management_Repository.ChatRepository;
+import tn.esprit.gaspillagezero.repository.Supplier_Order_Management_Repository.OrderRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 public class ChatService {
 
     private final ChatRepository chatRepository;
+    private final OrderRepository orderRepository;
     private static final String API_URL = "https://api.together.xyz/v1/chat/completions";
     private static final String API_KEY = "01301ddd79db215d207cd1e4f3a6c11ef9847f64f10dba8fb5e7aeae94106a38";
     private static final int MAX_HISTORY = 1000;
@@ -34,13 +37,19 @@ public class ChatService {
 
             ArrayNode messagesArray = requestBody.putArray("messages");
             List<Chat> chatHistory = getChatHistory(userId, MAX_HISTORY);
-
+            List<Order> orderChat= getAllOrder();
             for (Chat chat : chatHistory) {
                 ObjectNode chatNode = objectMapper.createObjectNode();
                 chatNode.put("role", chat.getRole());
                 chatNode.put("content", chat.getContent());
                 messagesArray.add(chatNode);
             }
+
+            for (Order order: orderChat){
+                ObjectNode orderNode = objectMapper.createObjectNode();
+                orderNode.put("role", "user");
+                orderNode.put("content", order.toString());
+                messagesArray.add(orderNode);}
 
             ObjectNode userMessageNode = objectMapper.createObjectNode();
             userMessageNode.put("role", "user");
@@ -81,9 +90,10 @@ public class ChatService {
         chatRepository.save(chat);
     }
 
-    private List<Chat> getChatHistory(Long userId, int limit) {
+    public List<Chat> getChatHistory(Long userId, int limit) {
         return chatRepository.findAllByUserIdOrderByTimestampDesc(userId);
     }
 
-
+    public List<Order> getAllOrder() {
+        System.out.println(orderRepository.findAll());    return orderRepository.findAll();}
 }
