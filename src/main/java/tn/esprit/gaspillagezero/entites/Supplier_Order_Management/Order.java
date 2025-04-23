@@ -24,14 +24,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer orderID;
-
     LocalDateTime deliveryDate;
-
     Integer quantity;
 
     @Enumerated(EnumType.STRING)
     OrderStatus orderStatus;
-
 
     @ManyToOne
     Ingredient ingredient;
